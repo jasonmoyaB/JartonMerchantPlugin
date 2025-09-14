@@ -38,19 +38,29 @@
 #  miniservertools.rtp:
 #    default: true
 
-name: MiniServerTools
+#name: MiniServerTools
+#version: 1.0
+#main: PluginsJason.MiniServerTools
+#api-version: 1.16
+#commands:
+#  ban:
+#    description: Banea a un jugador
+#    usage: /ban <jugador> [razón]
+#    permission: miniservertools.ban
+#    permission-message: "§cNo tienes permiso para usar este comando."
+#  unban:
+#    description: Desbanea a un jugador
+#    usage: /unban <jugador>
+#    permission: miniservertools.unban
+#    permission-message: "§cNo tienes permiso para usar este comando."
+
+name: NpcComerse
 version: 1.0
-main: PluginsJason.MiniServerTools
-api-version: 1.16
+main: PluginsJason.NpcComerse.NpcComerse
+api-version: 1.20
 commands:
-  ban:
-    description: Banea a un jugador
-    usage: /ban <jugador> [razón]
-    permission: miniservertools.ban
-    permission-message: "§cNo tienes permiso para usar este comando."
-  unban:
-    description: Desbanea a un jugador
-    usage: /unban <jugador>
-    permission: miniservertools.unban
-    permission-message: "§cNo tienes permiso para usar este comando."
+  jm:
+    description: Comandos del plugin JourneyMerchant
+    usage: /jm <subcomando>
+    aliases: [journeymerchant, jmcopy]
 
