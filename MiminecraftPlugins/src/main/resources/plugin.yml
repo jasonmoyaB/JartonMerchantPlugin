@@ -40,7 +40,7 @@
 
 name: MiniServerTools
 version: 1.0
-main: com.jason.miniservertools.MiniServerTools
+main: PluginsJason.MiniServerTools
 api-version: 1.16
 commands:
   ban:
