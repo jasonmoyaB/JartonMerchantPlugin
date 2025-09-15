@@ -2,6 +2,7 @@ package PluginsJason.commands;
 
 import PluginsJason.config.ItemManager;
 import PluginsJason.config.ItemSaver;
+import PluginsJason.config.ShopRotator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,7 @@ public class MainCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.sendMessage("Use: /jm <give|copy> <id>");
+            player.sendMessage("Use: /jm <give|copy|rotate> <id>");
             return true;
         }
 
@@ -59,8 +60,14 @@ public class MainCommand implements CommandExecutor {
                 player.sendMessage("✅ Item copied as §e" + uniqueId + "§a in §fcopied_items.yml.");
                 return true;
 
+            case "rotate":
+                ShopRotator rotator = new ShopRotator(plugin);
+                rotator.rotateItems();
+                player.sendMessage("🔄 Shop rotated manually. Check rotated_items.yml.");
+                return true;
+
             default:
-                player.sendMessage("Unknown subcommand. Use /jm give <id> or /jm copy");
+                player.sendMessage("Unknown subcommand. Use /jm give <id>, /jm copy or /jm rotate");
                 return true;
         }
     }
