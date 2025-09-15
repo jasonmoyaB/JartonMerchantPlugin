@@ -17,8 +17,6 @@ public class NpcComerse extends JavaPlugin {
         getLogger().info("NpcComerse is now actived.");
 
 
-        // Registrar comando /jm
-        getCommand("jm").setExecutor((CommandExecutor) new CopyCommand(this));
 
         // Cargar configuración
         saveDefaultConfig();

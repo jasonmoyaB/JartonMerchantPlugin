@@ -18,7 +18,7 @@ public class GiveCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("Este comando solo puede usarse en el juego.");
+            sender.sendMessage("You can use this command in game.");
             return true;
         }
 
@@ -31,12 +31,12 @@ public class GiveCommand implements CommandExecutor {
         ItemStack item = itemManager.getItem(id);
 
         if (item == null) {
-            player.sendMessage("❌ No se encontró el ítem con ID: " + id);
+            player.sendMessage("❌ Article with ID not found\n " + id);
             return true;
         }
 
         player.getInventory().addItem(item.clone());
-        player.sendMessage("✅ Recibiste el ítem: " + item.getItemMeta().getDisplayName());
+        player.sendMessage("✅ You got the ítem: " + item.getItemMeta().getDisplayName());
         return true;
     }
 }

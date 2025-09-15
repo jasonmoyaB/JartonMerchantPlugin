@@ -1,6 +1,5 @@
 package PluginsJason.config;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -9,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItemManager {
 
@@ -90,6 +91,20 @@ public class ItemManager {
     }
 
     private String applyHexColor(String input) {
-        return input.replaceAll("#([A-Fa-f0-9]{6})", "§x§$1".replaceAll("([A-Fa-f0-9])", "§$1"));
+        Pattern pattern = Pattern.compile("#([A-Fa-f0-9]{6})");
+        Matcher matcher = pattern.matcher(input);
+        StringBuffer result = new StringBuffer();
+
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            StringBuilder builder = new StringBuilder("§x");
+            for (char c : hex.toCharArray()) {
+                builder.append("§").append(c);
+            }
+            matcher.appendReplacement(result, Matcher.quoteReplacement(builder.toString()));
+        }
+
+        matcher.appendTail(result);
+        return result.toString();
     }
 }

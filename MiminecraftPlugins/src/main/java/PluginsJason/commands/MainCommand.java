@@ -1,6 +1,7 @@
 package PluginsJason.commands;
 
 import PluginsJason.config.ItemManager;
+import PluginsJason.config.ItemSaver;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,7 +27,7 @@ public class MainCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.sendMessage("use: /jm <give|copy> <id>");
+            player.sendMessage("Use: /jm <give|copy> <id>");
             return true;
         }
 
@@ -49,12 +50,13 @@ public class MainCommand implements CommandExecutor {
             case "copy":
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 if (handItem == null || handItem.getType().isAir()) {
-                    player.sendMessage("❌ You don´t have any item in hand.");
+                    player.sendMessage("❌ You don’t have any item in hand.");
                     return true;
                 }
 
-                // Aquí puedes agregar la lógica para guardar el ítem en archivo
-                player.sendMessage("📋 Item data copied. Review the file to paste it into config.yml.");
+                String uniqueId = "item" + System.currentTimeMillis(); // ID único por timestamp
+                ItemSaver.saveItem(plugin.getDataFolder(), handItem, uniqueId);
+                player.sendMessage("✅ Item copied as §e" + uniqueId + "§a in §fcopied_items.yml.");
                 return true;
 
             default:
