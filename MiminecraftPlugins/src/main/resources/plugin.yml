@@ -56,7 +56,7 @@
 
 name: NpcComerse
 version: 1.0
-main: PluginsJason.NpcComerse.NpcComerse
+main: PluginsJason.NpcComerse
 api-version: 1.20
 commands:
   jm:
