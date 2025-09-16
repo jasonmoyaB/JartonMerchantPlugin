@@ -38,7 +38,9 @@ public class ShopCommand implements CommandExecutor {
         }
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-        Inventory gui = Bukkit.createInventory(null, 27, ChatColor.DARK_PURPLE + "Ancient Traveler");
+
+        // 🖼 Título con Unicode que activa el fondo visual del resource pack
+        Inventory gui = Bukkit.createInventory(null, 27, " Ancient Traveler");
 
         int[] centerSlots = {11, 13, 15}; // Slots centrados en la segunda fila
         int index = 0;

@@ -28,6 +28,17 @@ public class AncientTravelerGUI implements Listener {
     public void openFor(Player player) {
         Inventory gui = Bukkit.createInventory(null, 27, ChatColor.DARK_PURPLE + "Ancient Traveler");
 
+        // Ícono decorativo con Unicode del resource pack
+        ItemStack icon = new ItemStack(Material.PAPER);
+        ItemMeta iconMeta = icon.getItemMeta();
+        if (iconMeta != null) {
+            iconMeta.setDisplayName("");
+            iconMeta.setLore(Collections.singletonList("§7Ícono decorativo del menú"));
+            icon.setItemMeta(iconMeta);
+        }
+        gui.setItem(4, icon); // Slot decorativo (centro de la primera fila)
+
+        // Cargar ítems rotativos desde YAML
         File file = new File(plugin.getDataFolder(), "rotated_items.yml");
         if (!file.exists()) {
             player.sendMessage("§cNo se encontró rotated_items.yml.");
