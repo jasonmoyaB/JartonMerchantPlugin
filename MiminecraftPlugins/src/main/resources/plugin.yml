@@ -1,61 +1,5 @@
-#name: MiniServerTools
-#version: 1.0
-#main: PluginsJason.MiminecraftPlugins
-#api-version: 1.16
-#
-#commands:
-#  ban:
-#    description: Bans a player
-#    usage: /ban <player>
-#    permission: miniservertools.ban
-#    permission-message: "§cYou don't have permission to use this command."
-#
-#  unban:
-#    description: Unbans a player
-#    usage: /unban <player>
-#    permission: miniservertools.unban
-#    permission-message: "§cYou don't have permission to use this command."
-#
-#  miinfo:
-#    description: Shows player information
-#    usage: /miinfo
-#    permission: miniservertools.miinfo
-#    permission-message: "§cYou don't have permission to use this command."
-#
-#  rtp:
-#    description: Teleports the player to a random location
-#    usage: /rtp
-#    permission: miniservertools.rtp
-#    permission-message: "§cYou don't have permission to use this command."
-#
-#permissions:
-#  miniservertools.ban:
-#    default: op
-#  miniservertools.unban:
-#    default: op
-#  miniservertools.miinfo:
-#    default: true
-#  miniservertools.rtp:
-#    default: true
-
-#name: MiniServerTools
-#version: 1.0
-#main: PluginsJason.MiniServerTools
-#api-version: 1.16
-#commands:
-#  ban:
-#    description: Banea a un jugador
-#    usage: /ban <jugador> [razón]
-#    permission: miniservertools.ban
-#    permission-message: "§cNo tienes permiso para usar este comando."
-#  unban:
-#    description: Desbanea a un jugador
-#    usage: /unban <jugador>
-#    permission: miniservertools.unban
-#    permission-message: "§cNo tienes permiso para usar este comando."
-
 name: NpcComerse
-version: 1.2.1
+version: 1.4.1
 main: PluginsJason.NpcComerse
 api-version: 1.20
 
@@ -69,3 +13,8 @@ commands:
     description: Abre la tienda del día
     usage: /jmshop
 
+  jmshopgui:
+    description: Abre la tienda visual sin CommandPanels
+    usage: /jmshopgui
+
+softdepend: [CommandPanels]
