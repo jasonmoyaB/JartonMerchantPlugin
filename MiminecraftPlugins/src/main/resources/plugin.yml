@@ -55,14 +55,16 @@
 #    permission-message: "§cNo tienes permiso para usar este comando."
 
 name: NpcComerse
-version: 1.2.0
+version: 1.2.1
 main: PluginsJason.NpcComerse
 api-version: 1.20
+
 commands:
   jm:
     description: Comandos del plugin JourneyMerchant
     usage: /jm <subcomando>
     aliases: [journeymerchant, jmcopy]
+
   jmshop:
     description: Abre la tienda del día
     usage: /jmshop
