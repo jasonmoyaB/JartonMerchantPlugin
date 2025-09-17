@@ -13,8 +13,8 @@ commands:
     description: Abre la tienda del día
     usage: /jmshop
 
-  jmshopgui:
-    description: Abre la tienda visual sin CommandPanels
-    usage: /jmshopgui
+#  jmshopgui:
+#    description: Abre la tienda visual sin CommandPanels
+#    usage: /jmshopgui
 
 softdepend: [CommandPanels]

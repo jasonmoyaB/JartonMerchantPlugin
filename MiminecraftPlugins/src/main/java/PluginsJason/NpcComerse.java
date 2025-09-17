@@ -7,6 +7,7 @@ import PluginsJason.config.ItemManager;
 import PluginsJason.config.ShopRotator;
 import PluginsJason.gui.AncientTravelerGUI;
 import PluginsJason.listeners.ShopListener;
+import PluginsJason.economy.EconomyManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class NpcComerse extends JavaPlugin {
@@ -14,6 +15,13 @@ public class NpcComerse extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        // 💰 Inicializar Vault Economy
+        if (!EconomyManager.setupEconomy(this)) {
+            getLogger().severe("Vault no está disponible. Plugin desactivado.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // 🧠 Inicializar sistema de ítems
         ItemManager itemManager = new ItemManager(getConfig());
@@ -26,15 +34,16 @@ public class NpcComerse extends JavaPlugin {
 
         // 🧩 Registrar eventos y comandos
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
+        getServer().getPluginManager().registerEvents(new ShopCommand(this), this); // Eventos de compra
         getCommand("jmshop").setExecutor(new ShopCommand(this));        // Abre comerciante visual
-        getCommand("jmshopgui").setExecutor(new VisualShopCommand(this));    // Abre GUI visual tipo panel
+//        getCommand("jmshopgui").setExecutor(new VisualShopCommand(this));    // Abre GUI visual tipo panel
         getCommand("jm").setExecutor(new MainCommand(itemManager, this));
 
-        getLogger().info("✅ NpcComerse activado sin dependencia de CommandPanels.");
+        getLogger().info("✅ NpcComerse now is actived!!!");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("🛑 NpcComerse desactivado.");
+        getLogger().info("🛑 NpcComerse disable.");
     }
 }

@@ -31,6 +31,10 @@
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <!-- 📚 Dependencias necesarias -->
@@ -41,6 +45,13 @@
             <artifactId>spigot-api</artifactId>
             <version>1.21.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Vault Economy -->
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
         </dependency>
 
         <!-- Adventure API -->
@@ -67,14 +78,12 @@
 
     <!-- 🛠️ Configuración de compilación -->
     <build>
-        <!--  Indica dónde están tus clases Java -->
         <sourceDirectory>src/main/java</sourceDirectory>
 
-        <!-- ✅ Incluye archivos como plugin.yml, panels, etc. -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <targetPath>.</targetPath> <!-- ✅ Esto fuerza que plugin.yml esté en la raíz del JAR -->
+                <targetPath>.</targetPath>
                 <includes>
                     <include>**/*.yml</include>
                     <include>**/*.json</include>
@@ -85,7 +94,6 @@
             </resource>
         </resources>
 
-        <!-- ✅ Plugin para generar el JAR correctamente -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
