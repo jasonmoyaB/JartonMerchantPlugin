@@ -46,9 +46,9 @@ public class ShopCommand implements CommandExecutor, Listener {
         // Create the GUI with a custom title using glyphs
         String rawTitle = "&f";
         String translatedTitle = ChatColor.translateAlternateColorCodes('&', rawTitle);
-        Inventory gui = Bukkit.createInventory(null, 54, translatedTitle); // Elevated GUI
+        Inventory gui = Bukkit.createInventory(null, 45, translatedTitle); // Elevated GUI
 
-        int[] itemSlots = {29, 31, 33}; // Centered row (row 4)
+        int[] itemSlots = {29, 31, 33}; // Fila 4 centrado (slots 27–35)
         int index = 0;
 
         // Load up to 3 items from the config
