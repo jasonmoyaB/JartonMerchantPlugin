@@ -132,11 +132,14 @@ public class ShopCommand implements CommandExecutor, Listener {
         // Extract price from lore
         int price = 0;
         for (String line : lore) {
-            if (ChatColor.stripColor(line).toLowerCase().contains("price:")) {
-                String[] parts = ChatColor.stripColor(line).split("\\$");
-                try {
-                    price = Integer.parseInt(parts[1].trim());
-                } catch (Exception ignored) {}
+            if (line.contains("$")) {
+                String stripped = ChatColor.stripColor(line);
+                String[] parts = stripped.split("\\$");
+                if (parts.length > 1) {
+                    try {
+                        price = Integer.parseInt(parts[1].replaceAll("[^0-9]", ""));
+                    } catch (Exception ignored) {}
+                }
                 break;
             }
         }
