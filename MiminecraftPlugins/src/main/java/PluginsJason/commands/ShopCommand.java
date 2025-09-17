@@ -1,7 +1,6 @@
 package PluginsJason.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.*;
@@ -10,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.util.*;
@@ -39,14 +39,18 @@ public class ShopCommand implements CommandExecutor {
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-        // 🖼 Título con Unicode que activa el fondo visual del resource pack
-        Inventory gui = Bukkit.createInventory(null, 27, " Ancient Traveler");
+        // 🖼 Título con glyphs que activan el fondo visual del resource pack
+        String rawTitle = "&f";
+        String translatedTitle = ChatColor.translateAlternateColorCodes('&', rawTitle);
+        Inventory gui = Bukkit.createInventory(null, 45, translatedTitle); // 5 filas
 
-        int[] centerSlots = {11, 13, 15}; // Slots centrados en la segunda fila
+        // 🎯 Slots horizontales centrados en la cuarta fila
+        int[] itemSlots = {29, 31, 33};
+
         int index = 0;
 
         for (int i = 1; i <= 3; i++) {
-            if (index >= centerSlots.length) break;
+            if (index >= itemSlots.length) break;
 
             String path = "rotated.item" + i;
             if (!config.contains(path + ".material")) continue;
@@ -74,12 +78,12 @@ public class ShopCommand implements CommandExecutor {
                 item.setItemMeta(meta);
             }
 
-            gui.setItem(centerSlots[index], item);
+            gui.setItem(itemSlots[index], item);
             index++;
         }
 
         player.openInventory(gui);
-        player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1f);
+        player.playSound(player.getLocation(), Sound.ENTITY_WANDERING_TRADER_DISAPPEARED, 1f, 1f);
         return true;
     }
 }
