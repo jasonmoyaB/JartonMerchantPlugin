@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -27,12 +28,10 @@ public class ShopCommand implements CommandExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("§cThis command can only be executed by players.");
             return true;
         }
-
-        Player player = (Player) sender;
 
         File file = new File(plugin.getDataFolder(), "rotated_items.yml");
         if (!file.exists()) {
@@ -60,15 +59,16 @@ public class ShopCommand implements CommandExecutor, Listener {
             travelerMeta.setCustomModelData(11);
             travelerMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6Ancient Traveler"));
 
-            List<String> lore = new ArrayList<>();
-            lore.add("");
-            lore.add(ChatColor.translateAlternateColorCodes('&', "&7Here you can find rare items"));
-            lore.add(ChatColor.translateAlternateColorCodes('&', "&7that cannot be purchased otherwise."));
-            lore.add("");
-            lore.add(ChatColor.translateAlternateColorCodes('&', "&e⌚ &fNew items in: &e" + timeFormatted));
-            lore.add("");
-            lore.add(ChatColor.translateAlternateColorCodes('&', "&7Ancient Traveler's shop"));
-            lore.add(ChatColor.translateAlternateColorCodes('&', "&7is restocked every day."));
+            List<String> lore = Arrays.asList(
+                    "",
+                    ChatColor.translateAlternateColorCodes('&', "&7Here you can find rare items"),
+                    ChatColor.translateAlternateColorCodes('&', "&7that cannot be purchased otherwise."),
+                    "",
+                    ChatColor.translateAlternateColorCodes('&', "&e⌚ &fNew items in: &e" + timeFormatted),
+                    "",
+                    ChatColor.translateAlternateColorCodes('&', "&7Ancient Traveler's shop"),
+                    ChatColor.translateAlternateColorCodes('&', "&7is restocked every day.")
+            );
 
             travelerMeta.setLore(lore);
             travelerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nonClickable"), PersistentDataType.INTEGER, 1);
@@ -128,9 +128,11 @@ public class ShopCommand implements CommandExecutor, Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!(event.getWhoClicked() instanceof Player player)) return;
 
-        Player player = (Player) event.getWhoClicked();
+        // ✅ Solo procesar clics dentro del inventario de la tienda
+        if (event.getClickedInventory() == null || event.getClickedInventory().getType() != InventoryType.CHEST) return;
+
         String expectedTitle = ChatColor.translateAlternateColorCodes('&', "&f");
         if (!event.getView().getTitle().equals(expectedTitle)) return;
 
@@ -159,24 +161,12 @@ public class ShopCommand implements CommandExecutor, Listener {
             }
         }
 
-        if (price <= 0) {
-            String msg = plugin.getConfig().getString("menssages.invalid_price", "&cThis item has an invalid price.");
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-            return;
-        }
+        if (price <= 0) return;
 
         Economy econ = EconomyManager.getEconomy();
-        if (econ == null) {
-            String msg = plugin.getConfig().getString("menssages.economy_unavailable", "&cThe economy system is not available.");
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-            return;
-        }
-
-        if (econ.getBalance(player) < price) {
-            String msg = plugin.getConfig().getString("menssages.no_balance", "&cYou don't have enough money. Price: &e$%price%");
-            msg = msg.replace("%price%", String.valueOf(price));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        if (econ == null || econ.getBalance(player) < price) {
             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 0.8f);
+            player.sendMessage("§cInsufficient gold!");
             return;
         }
 
@@ -186,14 +176,17 @@ public class ShopCommand implements CommandExecutor, Listener {
         if (commandToRun != null) {
             String finalCommand = commandToRun.replace("%player%", player.getName());
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+
+            // ✅ Ejecutar sonido si el comando lo incluye
+            if (commandToRun.contains("itempurchasesound")) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "itempurchasesound " + player.getName());
+            }
         } else {
             player.getInventory().addItem(clickedItem.clone());
         }
 
-        String msg = plugin.getConfig().getString("menssages.purchase_successful", "&aYou have purchased the item for &e$%price% using Vault.");
-        msg = msg.replace("%price%", String.valueOf(price));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+        player.sendMessage("§a✔ Purchased an item for §e$" + price + " Gold ");
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.2f);
     }
 
     private ItemStack addCommandTag(ItemStack item, String command) {
@@ -208,6 +201,5 @@ public class ShopCommand implements CommandExecutor, Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return null;
         return meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "buyCommand"), PersistentDataType.STRING);
-
     }
 }
