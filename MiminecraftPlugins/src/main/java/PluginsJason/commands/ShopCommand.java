@@ -46,7 +46,6 @@ public class ShopCommand implements CommandExecutor, Listener {
         String translatedTitle = ChatColor.translateAlternateColorCodes('&', rawTitle);
         Inventory gui = Bukkit.createInventory(null, 45, translatedTitle);
 
-        // Calcular tiempo restante para rotación
         long now = System.currentTimeMillis();
         long nextRotation = ShopRotator.getLastRotationTime() + (1000L * 60 * 60 * 24);
         long remainingMillis = nextRotation - now;
@@ -54,7 +53,6 @@ public class ShopCommand implements CommandExecutor, Listener {
         long minutes = (remainingMillis / (1000 * 60)) % 60;
         String timeFormatted = String.format("%02dh %02dm", hours, minutes);
 
-        // Ítem decorativo en slot 8: Ancient Traveler
         ItemStack travelerInfo = new ItemStack(Material.STICK);
         ItemMeta travelerMeta = travelerInfo.getItemMeta();
 
@@ -73,15 +71,13 @@ public class ShopCommand implements CommandExecutor, Listener {
             lore.add(ChatColor.translateAlternateColorCodes('&', "&7is restocked every day."));
 
             travelerMeta.setLore(lore);
-
-            // Marcar como decorativo (no clickeable)
             travelerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nonClickable"), PersistentDataType.INTEGER, 1);
             travelerInfo.setItemMeta(travelerMeta);
         }
 
         gui.setItem(8, travelerInfo);
 
-        int[] itemSlots = {29, 31, 33}; // Fila 4 centrado
+        int[] itemSlots = {29, 31, 33};
         int index = 0;
 
         for (int i = 1; i <= 3; i++) {
@@ -135,7 +131,6 @@ public class ShopCommand implements CommandExecutor, Listener {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
-        Inventory inv = event.getInventory();
         String expectedTitle = ChatColor.translateAlternateColorCodes('&', "&f");
         if (!event.getView().getTitle().equals(expectedTitle)) return;
 
@@ -149,11 +144,6 @@ public class ShopCommand implements CommandExecutor, Listener {
 
         List<String> lore = meta.getLore();
         if (lore == null) return;
-
-        player.sendMessage("§Item: §f" + meta.getDisplayName());
-        for (String line : lore) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
-        }
 
         int price = 0;
         for (String line : lore) {
@@ -170,18 +160,22 @@ public class ShopCommand implements CommandExecutor, Listener {
         }
 
         if (price <= 0) {
-            player.sendMessage("§cThis item has an invalid price.");
+            String msg = plugin.getConfig().getString("menssages.invalid_price", "&cThis item has an invalid price.");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             return;
         }
 
         Economy econ = EconomyManager.getEconomy();
         if (econ == null) {
-            player.sendMessage("§cEconomy system is not available.");
+            String msg = plugin.getConfig().getString("menssages.economy_unavailable", "&cThe economy system is not available.");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             return;
         }
 
         if (econ.getBalance(player) < price) {
-            player.sendMessage("§cYou don't have enough balance. Price: §$" + price);
+            String msg = plugin.getConfig().getString("menssages.no_balance", "&cYou don't have enough money. Price: &e$%price%");
+            msg = msg.replace("%price%", String.valueOf(price));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 0.8f);
             return;
         }
@@ -196,7 +190,9 @@ public class ShopCommand implements CommandExecutor, Listener {
             player.getInventory().addItem(clickedItem.clone());
         }
 
-        player.sendMessage("§aYou purchased the item for §$" + price + " using Vault.");
+        String msg = plugin.getConfig().getString("menssages.purchase_successful", "&aYou have purchased the item for &e$%price% using Vault.");
+        msg = msg.replace("%price%", String.valueOf(price));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
     }
 
@@ -212,5 +208,6 @@ public class ShopCommand implements CommandExecutor, Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return null;
         return meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "buyCommand"), PersistentDataType.STRING);
+
     }
 }

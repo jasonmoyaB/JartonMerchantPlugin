@@ -255,8 +255,4 @@ items:
     weight: 2
     price: 400
 
-menssages:
-  no_balance: "&cYou don't have enough money. Price: &e$%price%"
-  purchase_successful: "&aYou have purchased the item for &e$%price% using Vault."
-  invalid_price: "&cThis item has an invalid price."
-  economy_unavailable: "&cThe economy system is not available."
+

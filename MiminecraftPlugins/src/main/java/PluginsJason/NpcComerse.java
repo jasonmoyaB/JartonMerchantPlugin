@@ -36,7 +36,8 @@ public class NpcComerse extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShopCommand(this), this); // Eventos de compra
         getCommand("jmshop").setExecutor(new ShopCommand(this));        // Abre comerciante visual
 //        getCommand("jmshopgui").setExecutor(new VisualShopCommand(this));    // Abre GUI visual tipo panel
-        getCommand("jm").setExecutor(new MainCommand(this));
+        getCommand("jm").setExecutor(new MainCommand(this, itemManager));
+
 
         getLogger().info("✅ NpcComerse now is actived!!!");
     }

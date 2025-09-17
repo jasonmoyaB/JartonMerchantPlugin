@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JartonMerchant:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JartonMerchant_jar</output-path>
+    <root id="archive" name="JartonMerchant.jar" />
+  </artifact>
+</component>

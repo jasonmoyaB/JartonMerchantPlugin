@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="MiminecraftPlugins:jar2">
-    <output-path>$PROJECT_DIR$/out/artifacts/MiminecraftPlugins_jar2</output-path>
-    <root id="archive" name="MiminecraftPlugins.jar">
-      <element id="module-output" name="MiminecraftPlugins" />
-    </root>
-  </artifact>
-</component>
