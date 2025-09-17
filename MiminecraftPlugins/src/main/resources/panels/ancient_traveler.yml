@@ -1,0 +1,99 @@
+perm: default
+rows: 5
+title: '&f'
+commands:
+  - ancient_traveler_menu
+  - ancientraveler
+  - ancientshop
+  - ancientstore
+empty: AIR
+sound-on-open: ENTITY_WANDERING_TRADER_YES
+
+custom-item:
+  harm_arrow_2:
+    itemType:
+      - noAttributes
+    material: TIPPED_ARROW
+    potion: INSTANT_DAMAGE false true
+    name: '&fArrow of Harming'
+    lore:
+      - '&cInstant Damage II'
+  strength_potion_2:
+    itemType:
+      - noAttributes
+    material: POTION
+    potion: STRONG_STRENGTH
+    name: '&fPotion of Strength II'
+    lore:
+      - '&9Strength II (1:30)'
+      - ''
+      - '&5When Applied:'
+      - '&9+6 Attack Damage'
+  splash_healing_potion_2:
+    itemType:
+      - noAttributes
+    material: SPLASH_POTION
+    potion: INSTANT_HEAL false true
+    name: '&fSplash Potion of Healing'
+    lore:
+      - '&9Instant Health II'
+  looting_book:
+    itemType:
+      - noAttributes
+    material: ENCHANTED_BOOK
+    enchanted:
+      - LOOTING 3
+    name: '&eEnchanted Book'
+  frost_walker_book:
+    itemType:
+      - noAttributes
+    material: ENCHANTED_BOOK
+    enchanted:
+      - FROST_WALKER 2
+    name: '&eEnchanted Book'
+
+item:
+  '10':
+    custom-item: harm_arrow_2
+    name: '&cFlecha mortal'
+    lore:
+      - '&7Haz clic para obtenerla'
+    commands:
+      - 'give %player% tipped_arrow{Potion:"instant_damage"} 1'
+    sound: ENTITY_ARROW_HIT_PLAYER
+
+  '12':
+    custom-item: strength_potion_2
+    name: '&cPoción de Fuerza II'
+    lore:
+      - '&7Haz clic para obtenerla'
+    commands:
+      - 'give %player% potion{Potion:"strong_strength"} 1'
+    sound: ENTITY_PLAYER_LEVELUP
+
+  '14':
+    custom-item: splash_healing_potion_2
+    name: '&aSplash de Curación'
+    lore:
+      - '&7Haz clic para obtenerla'
+    commands:
+      - 'give %player% splash_potion{Potion:"instant_heal"} 1'
+    sound: ENTITY_GENERIC_DRINK
+
+  '16':
+    custom-item: looting_book
+    name: '&eLibro de Saqueo III'
+    lore:
+      - '&7Haz clic para obtenerlo'
+    commands:
+      - 'give %player% enchanted_book{StoredEnchantments:[{id:looting,lvl:3}]} 1'
+    sound: ENTITY_ITEM_PICKUP
+
+  '18':
+    custom-item: frost_walker_book
+    name: '&bLibro de Caminante Helado II'
+    lore:
+      - '&7Haz clic para obtenerlo'
+    commands:
+      - 'give %player% enchanted_book{StoredEnchantments:[{id:frost_walker,lvl:2}]} 1'
+    sound: ENTITY_PLAYER_LEVELUP

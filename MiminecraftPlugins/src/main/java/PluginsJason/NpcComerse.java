@@ -2,12 +2,12 @@ package PluginsJason;
 
 import PluginsJason.commands.MainCommand;
 import PluginsJason.commands.ShopCommand;
+import PluginsJason.commands.VisualShopCommand;
 import PluginsJason.config.ItemManager;
-import PluginsJason.commands.GiveCommand;
-import PluginsJason.commands.CopyCommand;
 import PluginsJason.config.ShopRotator;
+import PluginsJason.gui.AncientTravelerGUI;
 import PluginsJason.listeners.ShopListener;
-import org.bukkit.command.CommandExecutor;
+import PluginsJason.economy.EconomyManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class NpcComerse extends JavaPlugin {
@@ -15,21 +15,35 @@ public class NpcComerse extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        // 💰 Inicializar Vault Economy
+        if (!EconomyManager.setupEconomy(this)) {
+            getLogger().severe("Vault no está disponible. Plugin desactivado.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        // 🧠 Inicializar sistema de ítems
         ItemManager itemManager = new ItemManager(getConfig());
+
+        // 🔄 Iniciar rotación automática de ítems
         new ShopRotator(this).startRotationTask();
+
+        // 🎨 Registrar GUI visual personalizada
+        new AncientTravelerGUI(this); // Solo se registra, no se abre aquí
+
+        // 🧩 Registrar eventos y comandos
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
-        getCommand("jmshop").setExecutor(new ShopCommand());
+        getServer().getPluginManager().registerEvents(new ShopCommand(this), this); // Eventos de compra
+        getCommand("jmshop").setExecutor(new ShopCommand(this));        // Abre comerciante visual
+//        getCommand("jmshopgui").setExecutor(new VisualShopCommand(this));    // Abre GUI visual tipo panel
         getCommand("jm").setExecutor(new MainCommand(itemManager, this));
-        getLogger().info("NpcComerse is now actived.");
 
-
-
-        // Cargar configuración
-        saveDefaultConfig();
+        getLogger().info("✅ NpcComerse now is actived!!!");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("NpcComerse disable.");
+        getLogger().info("🛑 NpcComerse disable.");
     }
 }
