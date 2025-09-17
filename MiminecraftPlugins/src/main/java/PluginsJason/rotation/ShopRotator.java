@@ -1,8 +1,10 @@
-package PluginsJason.commands;
+package PluginsJason.rotation;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +13,11 @@ import java.util.*;
 public class ShopRotator {
 
     private final JavaPlugin plugin;
+    private static long lastRotationTime = System.currentTimeMillis();
 
     public ShopRotator(JavaPlugin plugin) {
         this.plugin = plugin;
+        loadRotationTime();
     }
 
     public void rotateItems() {
@@ -55,5 +59,40 @@ public class ShopRotator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        lastRotationTime = System.currentTimeMillis();
+        saveRotationTime();
+    }
+
+    public static long getLastRotationTime() {
+        return lastRotationTime;
+    }
+
+    private void saveRotationTime() {
+        File file = new File(plugin.getDataFolder(), "rotation_time.yml");
+        YamlConfiguration config = new YamlConfiguration();
+        config.set("lastRotation", lastRotationTime);
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadRotationTime() {
+        File file = new File(plugin.getDataFolder(), "rotation_time.yml");
+        if (!file.exists()) return;
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+        lastRotationTime = config.getLong("lastRotation", System.currentTimeMillis());
+    }
+
+    public void startRotationTask() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                rotateItems();
+                Bukkit.broadcastMessage("§e🛒 The store has been automatically updated.");
+            }
+        }.runTaskTimer(plugin, 0L, 20L * 60 * 60 * 24); // Cada 24h
     }
 }

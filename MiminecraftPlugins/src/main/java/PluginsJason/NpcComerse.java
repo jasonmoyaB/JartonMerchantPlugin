@@ -2,12 +2,11 @@ package PluginsJason;
 
 import PluginsJason.commands.MainCommand;
 import PluginsJason.commands.ShopCommand;
-import PluginsJason.commands.VisualShopCommand;
 import PluginsJason.config.ItemManager;
-import PluginsJason.config.ShopRotator;
 import PluginsJason.gui.AncientTravelerGUI;
 import PluginsJason.listeners.ShopListener;
 import PluginsJason.economy.EconomyManager;
+import PluginsJason.rotation.ShopRotator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class NpcComerse extends JavaPlugin {
@@ -37,7 +36,7 @@ public class NpcComerse extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShopCommand(this), this); // Eventos de compra
         getCommand("jmshop").setExecutor(new ShopCommand(this));        // Abre comerciante visual
 //        getCommand("jmshopgui").setExecutor(new VisualShopCommand(this));    // Abre GUI visual tipo panel
-        getCommand("jm").setExecutor(new MainCommand(itemManager, this));
+        getCommand("jm").setExecutor(new MainCommand(this));
 
         getLogger().info("✅ NpcComerse now is actived!!!");
     }
