@@ -1,6 +1,7 @@
 package PluginsJason.commands;
-import PluginsJason.economy.EconomyManager;
 
+import PluginsJason.economy.EconomyManager;
+import PluginsJason.rotation.ShopRotator;
 import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.economy.Economy;
-import PluginsJason.rotation.ShopRotator;
 
 import java.io.File;
 import java.util.*;
@@ -73,6 +73,9 @@ public class ShopCommand implements CommandExecutor, Listener {
             lore.add(ChatColor.translateAlternateColorCodes('&', "&7is restocked every day."));
 
             travelerMeta.setLore(lore);
+
+            // Marcar como decorativo (no clickeable)
+            travelerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nonClickable"), PersistentDataType.INTEGER, 1);
             travelerInfo.setItemMeta(travelerMeta);
         }
 
@@ -142,6 +145,8 @@ public class ShopCommand implements CommandExecutor, Listener {
         if (clickedItem == null || !clickedItem.hasItemMeta()) return;
 
         ItemMeta meta = clickedItem.getItemMeta();
+        if (meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "nonClickable"), PersistentDataType.INTEGER)) return;
+
         List<String> lore = meta.getLore();
         if (lore == null) return;
 

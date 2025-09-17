@@ -23,7 +23,7 @@ public class MainCommand implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("rotate")) {
             new ShopRotator(plugin).rotateItems();
-            sender.sendMessage("§aLa tienda ha sido rotada manualmente.");
+            sender.sendMessage("§aThe store has been manually rotated..");
             return true;
         }
 
