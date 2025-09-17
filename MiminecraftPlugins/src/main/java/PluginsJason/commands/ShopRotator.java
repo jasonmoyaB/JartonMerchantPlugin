@@ -1,10 +1,8 @@
-package PluginsJason.config;
+package PluginsJason.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,17 +18,11 @@ public class ShopRotator {
 
     public void rotateItems() {
         File copiedFile = new File(plugin.getDataFolder(), "copied_items.yml");
-        if (!copiedFile.exists()) {
-            plugin.getLogger().warning("copied_items.yml no existe.");
-            return;
-        }
+        if (!copiedFile.exists()) return;
 
         YamlConfiguration copiedConfig = YamlConfiguration.loadConfiguration(copiedFile);
         ConfigurationSection section = copiedConfig.getConfigurationSection("copied_items");
-        if (section == null || section.getKeys(false).isEmpty()) {
-            plugin.getLogger().warning("No hay ítems en copied_items.yml para rotar.");
-            return;
-        }
+        if (section == null || section.getKeys(false).isEmpty()) return;
 
         List<String> keys = new ArrayList<>(section.getKeys(false));
         Collections.shuffle(keys);
@@ -50,9 +42,8 @@ public class ShopRotator {
             rotated.set(path + ".lore", item.getStringList("lore"));
             rotated.set(path + ".customModelData", item.getInt("customModelData"));
 
-            int price = item.getInt("price", -1);
-            if (price > 0) {
-                rotated.set(path + ".price", price);
+            if (item.contains("price")) {
+                rotated.set(path + ".price", item.getInt("price"));
             }
 
             index++;
@@ -61,19 +52,8 @@ public class ShopRotator {
         File rotatedFile = new File(plugin.getDataFolder(), "rotated_items.yml");
         try {
             rotated.save(rotatedFile);
-            plugin.getLogger().info("✅ Rotación completada. Se actualizaron " + selected.size() + " ítems.");
         } catch (IOException e) {
-            plugin.getLogger().severe("❌ Error al guardar rotated_items.yml.");
             e.printStackTrace();
         }
-    }
-
-    public void startRotationTask() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                rotateItems();
-            }
-        }.runTaskTimer(plugin, 0L, 20L * 60 * 60 * 24); // Cada 24 horas
     }
 }

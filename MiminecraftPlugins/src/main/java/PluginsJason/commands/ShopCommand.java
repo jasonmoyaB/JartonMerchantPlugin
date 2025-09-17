@@ -77,7 +77,14 @@ public class ShopCommand implements CommandExecutor, Listener {
 
                 // Append price info to the lore
                 List<String> lore = meta.getLore() != null ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
-                lore.add("§7Price: §6$" + price);
+                lore.add(""); // Espacio visual
+
+                // Línea de precio con ícono dorado y texto gris
+                lore.add("§6 §7BUY §f§l" + amount + " §7FOR §e$" + price);
+                lore.add("");
+                // Botón de compra en verde brillante
+                lore.add("§a§l✔ Click to buy");
+
                 meta.setLore(lore);
 
                 item.setItemMeta(meta);
@@ -117,7 +124,7 @@ public class ShopCommand implements CommandExecutor, Listener {
         if (lore == null) return;
 
         // Show item characteristics in chat
-        player.sendMessage("§eItem: §f" + meta.getDisplayName());
+        player.sendMessage("§Item: §f" + meta.getDisplayName());
         for (String line : lore) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
         }
@@ -147,7 +154,7 @@ public class ShopCommand implements CommandExecutor, Listener {
 
         // Check if player has enough money
         if (econ.getBalance(player) < price) {
-            player.sendMessage("§cYou don't have enough balance. Price: §6$" + price);
+            player.sendMessage("§cYou don't have enough balance. Price: §$" + price);
             return;
         }
 
@@ -164,7 +171,7 @@ public class ShopCommand implements CommandExecutor, Listener {
         }
 
         // Confirmation message and sound
-        player.sendMessage("§aYou purchased the item for §6$" + price + " using Vault.");
+        player.sendMessage("§aYou purchased the item for §$" + price + " using Vault.");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
     }
 

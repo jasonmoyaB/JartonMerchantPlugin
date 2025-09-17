@@ -37,11 +37,9 @@ public class ItemManager {
             ItemMeta meta = item.getItemMeta();
             if (meta == null) continue;
 
-            // Nombre con hex
             String name = itemSection.getString("name");
             if (name != null) meta.setDisplayName(applyHexColor(name));
 
-            // Lore
             List<String> lore = itemSection.getStringList("lore");
             if (!lore.isEmpty()) {
                 List<String> coloredLore = new ArrayList<>();
@@ -51,12 +49,10 @@ public class ItemManager {
                 meta.setLore(coloredLore);
             }
 
-            // CustomModelData
             if (itemSection.contains("customModelData")) {
                 meta.setCustomModelData(itemSection.getInt("customModelData"));
             }
 
-            // Encantamientos
             if (itemSection.contains("enchantments")) {
                 List<String> enchants = itemSection.getStringList("enchantments");
                 for (String enchant : enchants) {
@@ -72,7 +68,6 @@ public class ItemManager {
             item.setItemMeta(meta);
             loadedItems.put(key, item);
 
-            // Peso
             int weight = itemSection.getInt("weight", 1);
             itemWeights.put(key, weight);
         }
@@ -88,6 +83,20 @@ public class ItemManager {
 
     public Map<String, Integer> getItemWeights() {
         return itemWeights;
+    }
+
+    public Integer getPriceByModelData(int modelData) {
+        for (String key : loadedItems.keySet()) {
+            ItemStack item = loadedItems.get(key);
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null && meta.hasCustomModelData() && meta.getCustomModelData() == modelData) {
+                ConfigurationSection section = config.getConfigurationSection("items." + key);
+                if (section != null && section.contains("price")) {
+                    return section.getInt("price");
+                }
+            }
+        }
+        return null;
     }
 
     private String applyHexColor(String input) {

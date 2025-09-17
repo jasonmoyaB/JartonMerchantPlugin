@@ -11,7 +11,7 @@ import java.util.*;
 
 public class ItemSaver {
 
-    public static void saveItem(File pluginFolder, ItemStack item, String id) {
+    public static void saveItem(File pluginFolder, ItemStack item, String id, Integer price) {
         File file = new File(pluginFolder, "copied_items.yml");
         if (!file.exists()) {
             try {
@@ -41,6 +41,10 @@ public class ItemSaver {
                 }
                 itemData.put("enchantments", enchants);
             }
+        }
+
+        if (price != null && price > 0) {
+            itemData.put("price", price);
         }
 
         config.set("copied_items." + id, itemData);
