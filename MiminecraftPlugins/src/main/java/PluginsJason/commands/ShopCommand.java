@@ -116,6 +116,12 @@ public class ShopCommand implements CommandExecutor, Listener {
         List<String> lore = meta.getLore();
         if (lore == null) return;
 
+        // Show item characteristics in chat
+        player.sendMessage("§eItem: §f" + meta.getDisplayName());
+        for (String line : lore) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
+        }
+
         // Extract price from lore
         int price = 0;
         for (String line : lore) {
