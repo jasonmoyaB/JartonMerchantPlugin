@@ -21,14 +21,14 @@ public class ShopRotator {
     public void rotateItems() {
         File copiedFile = new File(plugin.getDataFolder(), "copied_items.yml");
         if (!copiedFile.exists()) {
-            plugin.getLogger().warning("copied_items.yml no existe.");
+            plugin.getLogger().warning("copied_items.yml does not exist.");
             return;
         }
 
         YamlConfiguration copiedConfig = YamlConfiguration.loadConfiguration(copiedFile);
         ConfigurationSection section = copiedConfig.getConfigurationSection("copied_items");
         if (section == null || section.getKeys(false).isEmpty()) {
-            plugin.getLogger().warning("No hay ítems en copied_items.yml para rotar.");
+            plugin.getLogger().warning("There are no items in copied_items.yml to rotate.");
             return;
         }
 
@@ -61,9 +61,9 @@ public class ShopRotator {
         File rotatedFile = new File(plugin.getDataFolder(), "rotated_items.yml");
         try {
             rotated.save(rotatedFile);
-            plugin.getLogger().info("✅ Rotación completada. Se actualizaron " + selected.size() + " ítems.");
+            plugin.getLogger().info("✅ Rotation completed. Updated: " + selected.size() + " ítems.");
         } catch (IOException e) {
-            plugin.getLogger().severe("❌ Error al guardar rotated_items.yml.");
+            plugin.getLogger().severe("❌ error saving rotated_items.yml.");
             e.printStackTrace();
         }
     }

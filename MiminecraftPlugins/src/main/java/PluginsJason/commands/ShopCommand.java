@@ -144,6 +144,7 @@ public class ShopCommand implements CommandExecutor, Listener {
             }
         }
 
+
         if (price <= 0) {
             player.sendMessage("§cThis item has an invalid price.");
             return;
@@ -158,8 +159,11 @@ public class ShopCommand implements CommandExecutor, Listener {
         // Check if player has enough money
         if (econ.getBalance(player) < price) {
             player.sendMessage("§cYou don't have enough balance. Price: §$" + price);
+            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 0.8f);//sonido de rechazo
+
             return;
         }
+
 
         // Withdraw money
         econ.withdrawPlayer(player, price);
