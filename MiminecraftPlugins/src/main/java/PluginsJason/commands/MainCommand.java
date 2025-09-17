@@ -22,7 +22,7 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eUsa §a/jm <rotate|copy|give>");
+            sender.sendMessage("§eUsa §a/jm <rotate|copy|give>");//comadnos
             return true;
         }
 
