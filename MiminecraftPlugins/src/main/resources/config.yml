@@ -3,8 +3,8 @@ items:
     material: AMETHYST_SHARD
     name: "#AA00FF&lBlessed Amethyst Shard"
     lore:
-      - "&7Glows with ancient energy"
-      - "&7Price: &6$50"
+      - "&Glows with ancient energy"
+      #- "&Price: &6$50"
     amount: 1
     customModelData: 1001
     weight: 5
@@ -14,8 +14,8 @@ items:
     material: HEART_OF_THE_SEA
     name: "#00FFFF&lHeart of the Ocean"
     lore:
-      - "&bAncestral power from the deep"
-      - "&7Price: &6$100"
+      - "&Ancestral power from the deep"
+#      - "&7Price: &6$100"
     amount: 1
     customModelData: 1002
     weight: 4
@@ -25,8 +25,8 @@ items:
     material: SHULKER_SHELL
     name: "#FF00FF&lDimensional Shell"
     lore:
-      - "&dProtects secrets from the End"
-      - "&7Price: &6$200"
+      - "&Protects secrets from the End"
+    #  - "&7Price: &6$200"
     amount: 1
     customModelData: 1003
     weight: 3
@@ -36,8 +36,8 @@ items:
     material: DIAMOND_HORSE_ARMOR
     name: "#00FFAA&lLegendary Horse Armor"
     lore:
-      - "&7Only for chosen steeds"
-      - "&7Price: &6$400"
+      - "&Only for chosen steeds"
+    #  - "&7Price: &6$400"
     amount: 1
     customModelData: 1004
     weight: 2
@@ -47,8 +47,8 @@ items:
     material: ENCHANTED_GOLDEN_APPLE
     name: "#FFD700&lSupreme Golden Apple"
     lore:
-      - "&6Grants divine blessings"
-      - "&7Price: &6$800"
+      - "&63Grants divine blessings"
+#      - "&7Price: &6$800"
     amount: 1
     customModelData: 1005
     weight: 1
@@ -58,8 +58,8 @@ items:
     material: TOTEM_OF_UNDYING
     name: "#FFAA00&lTotem of Eternity"
     lore:
-      - "&eSaves you from death"
-      - "&7Price: &6$200"
+      - "&Saves you from death"
+#      - "&7Price: &6$200"
     amount: 1
     customModelData: 1006
     weight: 3
@@ -69,8 +69,8 @@ items:
     material: BAMBOO
     name: "#00FF00&lSacred Bamboo"
     lore:
-      - "&aSymbol of eternal growth"
-      - "&7Price: &6$100"
+      - "&Symbol of eternal growth"
+#      - "&7Price: &6$100"
     amount: 16
     customModelData: 1007
     weight: 4
@@ -80,8 +80,8 @@ items:
     material: TURTLE_HELMET
     name: "#228B22&lTurtle Shell"
     lore:
-      - "&2Natural aquatic protection"
-      - "&7Price: &6$200"
+      - "&Natural aquatic protection"
+#      - "&7Price: &6$200"
     amount: 1
     customModelData: 1008
     weight: 3
@@ -91,8 +91,8 @@ items:
     material: DRAGON_BREATH
     name: "#FF4500&lDragon Breath"
     lore:
-      - "&cEssence of ancient power"
-      - "&7Price: &6$400"
+      - "&Essence of ancient power"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1009
     weight: 2
@@ -102,8 +102,8 @@ items:
     material: TRIDENT
     name: "#00CED1&lGuardian's Trident"
     lore:
-      - "&bControls water and storms"
-      - "&7Price: &6$800"
+      - "&Controls water and storms"
+#      - "&7Price: &6$800"
     amount: 1
     customModelData: 1010
     weight: 1
@@ -113,8 +113,8 @@ items:
     material: NETHERITE_INGOT
     name: "#808080&lNetherite Ingot"
     lore:
-      - "&8Indestructible material"
-      - "&7Price: &6$400"
+      - "&Indestructible material"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1011
     weight: 2
@@ -124,8 +124,8 @@ items:
     material: TIPPED_ARROW
     name: "#8B0000&lArrow of Harm II"
     lore:
-      - "&4Deals instant damage"
-      - "&7Price: &6$200"
+      - "&Deals instant damage"
+#     - "&7Price: &6$200"
     amount: 8
     customModelData: 1012
     weight: 3
@@ -135,8 +135,8 @@ items:
     material: POTION
     name: "#FF69B4&lPotion of Strength II"
     lore:
-      - "&dBoosts your attack power"
-      - "&7Price: &6$400"
+      - "&Boosts your attack power"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1013
     weight: 2
@@ -146,8 +146,8 @@ items:
     material: SPLASH_POTION
     name: "#00FF7F&lHealing Splash II"
     lore:
-      - "&aRestores health instantly"
-      - "&7Price: &6$400"
+      - "&Restores health instantly"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1014
     weight: 2
@@ -157,8 +157,8 @@ items:
     material: SPLASH_POTION
     name: "#8B0000&lInstant Damage Splash II"
     lore:
-      - "&4Delivers pain on contact"
-      - "&7Price: &6$800"
+      - "&Delivers pain on contact"
+#      - "&7Price: &6$800"
     amount: 1
     customModelData: 1015
     weight: 1
@@ -168,8 +168,8 @@ items:
     material: ENCHANTED_BOOK
     name: "#FFD700&lBook: Looting III"
     lore:
-      - "&6Increases mob drops"
-      - "&7Price: &6$200"
+      - "&Increases mob drops"
+#      - "&7Price: &6$200"
     amount: 1
     customModelData: 1016
     enchantments:
@@ -181,8 +181,8 @@ items:
     material: ENCHANTED_BOOK
     name: "#FFD700&lBook: Smite V"
     lore:
-      - "&6Extra damage to undead"
-      - "&7Price: &6$200"
+      - "&Extra damage to undead"
+#      - "&7Price: &6$200"
     amount: 1
     customModelData: 1017
     enchantments:
@@ -194,8 +194,8 @@ items:
     material: ENCHANTED_BOOK
     name: "#FFD700&lBook: Feather Falling IV"
     lore:
-      - "&6Reduces fall damage"
-      - "&7Price: &6$200"
+      - "&Reduces fall damage"
+#      - "&7Price: &6$200"
     amount: 1
     customModelData: 1018
     enchantments:
@@ -207,8 +207,8 @@ items:
     material: ENCHANTED_BOOK
     name: "#FFD700&lBook: Frost Walker II"
     lore:
-      - "&6Walk on ice"
-      - "&7Price: &6$400"
+      - "&Walk on ice"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1019
     enchantments:
@@ -220,8 +220,8 @@ items:
     material: ENCHANTED_BOOK
     name: "#FFD700&lBook: Piercing IV"
     lore:
-      - "&6Hits multiple enemies"
-      - "&7Price: &6$400"
+      - "&Hits multiple enemies"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1020
     enchantments:
@@ -233,8 +233,8 @@ items:
     material: ENCHANTED_BOOK
     name: "#FFD700&lBook: Quick Charge III"
     lore:
-      - "&6Faster crossbow reload"
-      - "&7Price: &6$400"
+      - "&Faster crossbow reload"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1021
     enchantments:
@@ -246,11 +246,17 @@ items:
     material: ENCHANTED_BOOK
     name: "#FFD700&lBook: Luck of the Sea III"
     lore:
-      - "&6Improves fishing loot"
-      - "&7Price: &6$400"
+      - "&Improves fishing loot"
+#      - "&7Price: &6$400"
     amount: 1
     customModelData: 1022
     enchantments:
       - LUCK_OF_THE_SEA:3
     weight: 2
     price: 400
+
+menssages:
+  no_balance: "&cYou don't have enough money. Price: &e$%price%"
+  purchase_successful: "&aYou have purchased the item for &e$%price% using Vault."
+  invalid_price: "&cThis item has an invalid price."
+  economy_unavailable: "&cThe economy system is not available."

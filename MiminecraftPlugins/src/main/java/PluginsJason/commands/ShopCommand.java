@@ -1,6 +1,7 @@
 package PluginsJason.commands;
 
 import PluginsJason.economy.EconomyManager;
+import PluginsJason.rotation.ShopRotator;
 import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,7 +27,6 @@ public class ShopCommand implements CommandExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // Only allow players to execute this command
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cThis command can only be executed by players.");
             return true;
@@ -34,7 +34,6 @@ public class ShopCommand implements CommandExecutor, Listener {
 
         Player player = (Player) sender;
 
-        // Load the rotated_items.yml configuration file
         File file = new File(plugin.getDataFolder(), "rotated_items.yml");
         if (!file.exists()) {
             player.sendMessage("§crotated_items.yml not found.");
@@ -43,15 +42,48 @@ public class ShopCommand implements CommandExecutor, Listener {
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-        // Create the GUI with a custom title using glyphs
         String rawTitle = "&f";
         String translatedTitle = ChatColor.translateAlternateColorCodes('&', rawTitle);
-        Inventory gui = Bukkit.createInventory(null, 54, translatedTitle); // Elevated GUI
+        Inventory gui = Bukkit.createInventory(null, 45, translatedTitle);
 
-        int[] itemSlots = {29, 31, 33}; // Centered row (row 4)
+        // Calcular tiempo restante para rotación
+        long now = System.currentTimeMillis();
+        long nextRotation = ShopRotator.getLastRotationTime() + (1000L * 60 * 60 * 24);
+        long remainingMillis = nextRotation - now;
+        long hours = (remainingMillis / (1000 * 60 * 60)) % 24;
+        long minutes = (remainingMillis / (1000 * 60)) % 60;
+        String timeFormatted = String.format("%02dh %02dm", hours, minutes);
+
+        // Ítem decorativo en slot 8: Ancient Traveler
+        ItemStack travelerInfo = new ItemStack(Material.STICK);
+        ItemMeta travelerMeta = travelerInfo.getItemMeta();
+
+        if (travelerMeta != null) {
+            travelerMeta.setCustomModelData(11);
+            travelerMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6Ancient Traveler"));
+
+            List<String> lore = new ArrayList<>();
+            lore.add("");
+            lore.add(ChatColor.translateAlternateColorCodes('&', "&7Here you can find rare items"));
+            lore.add(ChatColor.translateAlternateColorCodes('&', "&7that cannot be purchased otherwise."));
+            lore.add("");
+            lore.add(ChatColor.translateAlternateColorCodes('&', "&e⌚ &fNew items in: &e" + timeFormatted));
+            lore.add("");
+            lore.add(ChatColor.translateAlternateColorCodes('&', "&7Ancient Traveler's shop"));
+            lore.add(ChatColor.translateAlternateColorCodes('&', "&7is restocked every day."));
+
+            travelerMeta.setLore(lore);
+
+            // Marcar como decorativo (no clickeable)
+            travelerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "nonClickable"), PersistentDataType.INTEGER, 1);
+            travelerInfo.setItemMeta(travelerMeta);
+        }
+
+        gui.setItem(8, travelerInfo);
+
+        int[] itemSlots = {29, 31, 33}; // Fila 4 centrado
         int index = 0;
 
-        // Load up to 3 items from the config
         for (int i = 1; i <= 3; i++) {
             if (index >= itemSlots.length) break;
 
@@ -66,24 +98,25 @@ public class ShopCommand implements CommandExecutor, Listener {
             String commandToRun = config.getString(path + ".command");
 
             ItemStack item = new ItemStack(material, amount);
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString(path + ".name", "Item")));
-                meta.setLore(config.getStringList(path + ".lore"));
+            ItemMeta itemMeta = item.getItemMeta();
+            if (itemMeta != null) {
+                itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString(path + ".name", "Item")));
+                itemMeta.setLore(config.getStringList(path + ".lore"));
 
                 if (config.contains(path + ".customModelData")) {
-                    meta.setCustomModelData(config.getInt(path + ".customModelData"));
+                    itemMeta.setCustomModelData(config.getInt(path + ".customModelData"));
                 }
 
-                // Append price info to the lore
-                List<String> lore = meta.getLore() != null ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
-                lore.add("§7Price: §6$" + price);
-                meta.setLore(lore);
+                List<String> lore = itemMeta.getLore() != null ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
+                lore.add("");
+                lore.add("§6 §7BUY §f§l" + amount + " §7FOR §e$" + price);
+                lore.add("");
+                lore.add("§a§l✔ Click to buy");
 
-                item.setItemMeta(meta);
+                itemMeta.setLore(lore);
+                item.setItemMeta(itemMeta);
             }
 
-            // Store the command as hidden metadata (optional)
             if (commandToRun != null) {
                 item = addCommandTag(item, commandToRun);
             }
@@ -92,7 +125,6 @@ public class ShopCommand implements CommandExecutor, Listener {
             index++;
         }
 
-        // Open the GUI and play a sound
         player.openInventory(gui);
         player.playSound(player.getLocation(), Sound.ENTITY_WANDERING_TRADER_DISAPPEARED, 1f, 1f);
         return true;
@@ -107,29 +139,32 @@ public class ShopCommand implements CommandExecutor, Listener {
         String expectedTitle = ChatColor.translateAlternateColorCodes('&', "&f");
         if (!event.getView().getTitle().equals(expectedTitle)) return;
 
-        event.setCancelled(true); // Prevent item movement
+        event.setCancelled(true);
 
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || !clickedItem.hasItemMeta()) return;
 
         ItemMeta meta = clickedItem.getItemMeta();
+        if (meta.getPersistentDataContainer().has(new NamespacedKey(plugin, "nonClickable"), PersistentDataType.INTEGER)) return;
+
         List<String> lore = meta.getLore();
         if (lore == null) return;
 
-        // Show item characteristics in chat
-        player.sendMessage("§eItem: §f" + meta.getDisplayName());
+        player.sendMessage("§Item: §f" + meta.getDisplayName());
         for (String line : lore) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
         }
 
-        // Extract price from lore
         int price = 0;
         for (String line : lore) {
-            if (ChatColor.stripColor(line).toLowerCase().contains("price:")) {
-                String[] parts = ChatColor.stripColor(line).split("\\$");
-                try {
-                    price = Integer.parseInt(parts[1].trim());
-                } catch (Exception ignored) {}
+            if (line.contains("$")) {
+                String stripped = ChatColor.stripColor(line);
+                String[] parts = stripped.split("\\$");
+                if (parts.length > 1) {
+                    try {
+                        price = Integer.parseInt(parts[1].replaceAll("[^0-9]", ""));
+                    } catch (Exception ignored) {}
+                }
                 break;
             }
         }
@@ -145,16 +180,14 @@ public class ShopCommand implements CommandExecutor, Listener {
             return;
         }
 
-        // Check if player has enough money
         if (econ.getBalance(player) < price) {
-            player.sendMessage("§cYou don't have enough balance. Price: §6$" + price);
+            player.sendMessage("§cYou don't have enough balance. Price: §$" + price);
+            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 0.8f);
             return;
         }
 
-        // Withdraw money
         econ.withdrawPlayer(player, price);
 
-        // Execute command or give item
         String commandToRun = getCommandTag(clickedItem);
         if (commandToRun != null) {
             String finalCommand = commandToRun.replace("%player%", player.getName());
@@ -163,12 +196,10 @@ public class ShopCommand implements CommandExecutor, Listener {
             player.getInventory().addItem(clickedItem.clone());
         }
 
-        // Confirmation message and sound
-        player.sendMessage("§aYou purchased the item for §6$" + price + " using Vault.");
+        player.sendMessage("§aYou purchased the item for §$" + price + " using Vault.");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
     }
 
-    // Adds a hidden command tag to the item using PersistentDataContainer
     private ItemStack addCommandTag(ItemStack item, String command) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return item;
@@ -177,7 +208,6 @@ public class ShopCommand implements CommandExecutor, Listener {
         return item;
     }
 
-    // Retrieves the hidden command tag from the item
     private String getCommandTag(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return null;
