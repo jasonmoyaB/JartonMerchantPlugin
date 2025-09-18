@@ -107,7 +107,7 @@ public class ShopCommand implements CommandExecutor, Listener {
                 lore.add("");
                 lore.add("§6 §Ｂᴜʏ §f§l" + amount + " §7Ｆｏｒ §e$" + price);
                 lore.add("");
-                lore.add("§a§l✔ Click to buy");
+                lore.add("§a§l✔ Ｃʟɪᴄᴋ ᴛᴏ ʙᴜʏ");
 
                 itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
