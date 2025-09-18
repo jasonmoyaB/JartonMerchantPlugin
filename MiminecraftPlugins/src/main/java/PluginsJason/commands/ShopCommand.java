@@ -105,7 +105,7 @@ public class ShopCommand implements CommandExecutor, Listener {
 
                 List<String> lore = itemMeta.getLore() != null ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
                 lore.add("");
-                lore.add("§6 §7BUY §f§l" + amount + " §7FOR §e$" + price);
+                lore.add("§6 §Ｂᴜʏ §f§l" + amount + " §7Ｆｏｒ §e$" + price);
                 lore.add("");
                 lore.add("§a§l✔ Click to buy");
 
@@ -166,7 +166,7 @@ public class ShopCommand implements CommandExecutor, Listener {
         Economy econ = EconomyManager.getEconomy();
         if (econ == null || econ.getBalance(player) < price) {
             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 0.8f);
-            player.sendMessage("§cInsufficient gold!");
+            player.sendMessage("§cＩɴѕᴜꜰꜰɪᴄɪᴇɴᴛ ɢᴏʟᴅ!");
             return;
         }
 
@@ -185,7 +185,7 @@ public class ShopCommand implements CommandExecutor, Listener {
             player.getInventory().addItem(clickedItem.clone());
         }
 
-        player.sendMessage("§a✔ Purchased an item for §e$" + price + " Gold ");
+        player.sendMessage("§a✔ Ｐᴜʀᴄʜᴀѕᴇᴅ ᴀɴ ɪᴛᴇᴍ ꜰᴏʀ §e$" + price + " Ｇᴏʟᴅ ");
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.2f);
     }
 

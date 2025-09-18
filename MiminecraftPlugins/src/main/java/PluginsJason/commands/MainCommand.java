@@ -39,19 +39,20 @@ public class MainCommand implements CommandExecutor {
                 return new GiveCommand(itemManager).onCommand(sender, command, label, args);
 
             default:
-                sender.sendMessage("§cSubcomando desconocido: §f" + sub);
+                sender.sendMessage("§cunknown subcommand §f" + sub);
                 return true;
         }
     }
 
     private boolean handleRotate(CommandSender sender) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cEste comando solo puede ser ejecutado por jugadores.");
+            sender.sendMessage("§c\n" +
+                    "This command can only be executed by players.");
             return true;
         }
 
         new ShopRotator(plugin).rotateItems();
-        sender.sendMessage("§aThe store has been manually rotated.");
+        sender.sendMessage("§aＴʜᴇ ѕᴛᴏʀᴇ ʜᴀѕ ʙᴇᴇɴ ᴍᴀɴᴜᴀʟʟʏ ʀᴏᴛᴀᴛᴇᴅ.");
         return true;
     }
 }

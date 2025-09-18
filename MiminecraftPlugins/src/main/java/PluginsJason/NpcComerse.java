@@ -17,7 +17,7 @@ public class NpcComerse extends JavaPlugin {
 
         // 💰 Inicializar Vault Economy
         if (!EconomyManager.setupEconomy(this)) {
-            getLogger().severe("Vault no está disponible. Plugin desactivado.");
+            getLogger().severe("Vault is unavailable. Plugin disabled");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
