@@ -1,25 +1,30 @@
+# Plugin metadata
 name: NpcComerse
 version: 2.0.0
 main: PluginsJason.NpcComerse
 api-version: 1.20
 
+# Command registration
 commands:
   jm:
-    description: Comandos del plugin JourneyMerchant
-    usage: /jm <subcomando>
-    aliases: [journeymerchant, jmcopy]
+    description: Commands for the JourneyMerchant plugin
+    usage: /jm <copy|rotate|give|reload>
+    aliases: [journeymerchant]
     permission: jm.admin
-    permission-message: §cYou don't have permission to use this command.
+    permission-message: §c⛔ You don't have permission to use JourneyMerchant admin commands.
 
   jmshop:
-    description: Abre la tienda del día
+    description: Opens the daily shop GUI
     usage: /jmshop
     permission: jmshop.use
-    permission-message: §cYou don't have permission to open the shop.
+    permission-message: §c⛔ You don't have permission to open the shop.
 
+# Permission definitions
 permissions:
   jmshop.use:
-    default: true
+    description: Allows access to the daily visual shop (/jmshop)
+    default: true  # Granted to all players by default
 
   jm.admin:
-    default: op
+    description: Allows use of admin commands like /jm copy, /jm rotate, /jm give
+    default: op  # Must be explicitly granted (not given by default)
