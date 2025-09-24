@@ -50,14 +50,15 @@ public class CopyCommand implements CommandExecutor {
             Integer configPrice = itemManager.getPriceByModelData(modelData);
             price = (configPrice != null) ? configPrice : new Random().nextInt(1901) + 100;
         } else {
-            price = new Random().nextInt(1901) + 100;
+            //Price 3000 to up
+            price = new Random().nextInt(1001) + 3000;
         }
 
         String id = "item" + System.currentTimeMillis();
         ItemSaver.saveItem(plugin.getDataFolder(), item, id, price);
         player.sendMessage("§aItem successfully copied as §e" + id + "§a in copied_items.yml with price §e$" + price);
 
-        // También agregar a rotated_items.yml si hay espacio
+
         File rotatedFile = new File(plugin.getDataFolder(), "rotated_items.yml");
         YamlConfiguration rotatedConfig = YamlConfiguration.loadConfiguration(rotatedFile);
 

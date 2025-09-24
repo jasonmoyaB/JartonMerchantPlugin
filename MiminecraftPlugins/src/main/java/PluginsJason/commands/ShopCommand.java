@@ -5,6 +5,7 @@ import PluginsJason.rotation.ShopRotator;
 import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -96,22 +97,54 @@ public class ShopCommand implements CommandExecutor, Listener {
             ItemStack item = new ItemStack(material, amount);
             ItemMeta itemMeta = item.getItemMeta();
             if (itemMeta != null) {
-                itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString(path + ".name", "Item")));
+                //  Nombre dinámico si no está definido
+                String rawName = config.getString(path + ".name");
+                String displayName;
+
+                if (rawName != null && !rawName.isEmpty()) {
+                    displayName = ChatColor.translateAlternateColorCodes('&', rawName);
+                } else {
+                    String materialName = material.name().replace("_", " ").toLowerCase();
+                    displayName = "§f" + Character.toUpperCase(materialName.charAt(0)) + materialName.substring(1);
+                }
+
+                itemMeta.setDisplayName(displayName);
                 itemMeta.setLore(config.getStringList(path + ".lore"));
 
                 if (config.contains(path + ".customModelData")) {
                     itemMeta.setCustomModelData(config.getInt(path + ".customModelData"));
                 }
 
+                // enchtments in jmshop
+                if (config.contains(path + ".enchantments")) {
+                    List<String> enchants = config.getStringList(path + ".enchantments");
+                    for (String entry : enchants) {
+                        String[] parts = entry.split(":");
+                        if (parts.length == 2) {
+                            Enchantment enchant = Enchantment.getByName(parts[0].toUpperCase());
+                            int level;
+                            try {
+                                level = Integer.parseInt(parts[1]);
+                            } catch (NumberFormatException e) {
+                                continue;
+                            }
+                            if (enchant != null) {
+                                itemMeta.addEnchant(enchant, level, true);
+                            }
+                        }
+                    }
+                }
+
                 List<String> lore = itemMeta.getLore() != null ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
                 lore.add("");
-                lore.add("§6 § ʙᴜʏ §f§l" + amount + " §7ꜰᴏʀ §e$" + price);
+                lore.add("§6 § ʙᴜʏ §f§l" + amount + " §7ꜰᴏʀ §e$" + price + " §eɢᴏʟᴅ");
                 lore.add("");
                 lore.add("§a§l✔ ᴄʟɪᴄᴋ ᴛᴏ ʙᴜʏ");
 
                 itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
             }
+
 
             if (commandToRun != null) {
                 item = addCommandTag(item, commandToRun);
