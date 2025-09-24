@@ -13,6 +13,9 @@ commands:
     description: Abre la tienda del día
     usage: /jmshop
 
+permissions:
+  jmshop.use:
+    default: true
 
 
 
