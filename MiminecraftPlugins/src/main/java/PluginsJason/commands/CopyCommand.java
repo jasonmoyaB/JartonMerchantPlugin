@@ -51,7 +51,7 @@ public class CopyCommand implements CommandExecutor {
             price = (configPrice != null) ? configPrice : new Random().nextInt(1901) + 100;
         } else {
             //Price 3000 to up
-            price = new Random().nextInt(1001) + 3000;
+            price = new Random().nextInt(3001) + 6000;
         }
 
         String id = "item" + System.currentTimeMillis();
