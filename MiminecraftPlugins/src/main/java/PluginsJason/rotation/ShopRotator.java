@@ -50,6 +50,11 @@ public class ShopRotator {
                 rotated.set(path + ".price", item.getInt("price"));
             }
 
+            // ✅ Copiar encantamientos si existen
+            if (item.contains("enchantments")) {
+                rotated.set(path + ".enchantments", item.getStringList("enchantments"));
+            }
+
             index++;
         }
 

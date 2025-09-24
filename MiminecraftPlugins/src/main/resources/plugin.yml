@@ -8,12 +8,18 @@ commands:
     description: Comandos del plugin JourneyMerchant
     usage: /jm <subcomando>
     aliases: [journeymerchant, jmcopy]
+    permission: jm.admin
+    permission-message: §cYou don't have permission to use this command.
 
   jmshop:
     description: Abre la tienda del día
     usage: /jmshop
+    permission: jmshop.use
+    permission-message: §cYou don't have permission to open the shop.
 
+permissions:
+  jmshop.use:
+    default: true
 
-
-
-softdepend: [CommandPanels]
+  jm.admin:
+    default: op
