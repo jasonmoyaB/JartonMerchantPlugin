@@ -2,11 +2,17 @@ package PluginsJason.commands;
 
 import PluginsJason.config.ItemManager;
 import PluginsJason.config.ItemSaver;
+import org.bukkit.Material;
 import org.bukkit.command.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class CopyCommand implements CommandExecutor {
 
@@ -37,18 +43,46 @@ public class CopyCommand implements CommandExecutor {
         }
 
         ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasCustomModelData()) {
-            player.sendMessage("§cEl ítem necesita tener customModelData para extraer el precio.");
-            return true;
-        }
+        int price;
 
-        int modelData = meta.getCustomModelData();
-        Integer price = itemManager.getPriceByModelData(modelData);
+        if (meta != null && meta.hasCustomModelData()) {
+            int modelData = meta.getCustomModelData();
+            Integer configPrice = itemManager.getPriceByModelData(modelData);
+            price = (configPrice != null) ? configPrice : new Random().nextInt(1901) + 100;
+        } else {
+            price = new Random().nextInt(1901) + 100;
+        }
 
         String id = "item" + System.currentTimeMillis();
         ItemSaver.saveItem(plugin.getDataFolder(), item, id, price);
+        player.sendMessage("§aItem copiado exitosamente como §e" + id + "§a en §fcopied_items.yml con precio §e$" + price);
 
-        player.sendMessage("§aItem copiado exitosamente como §e" + id + "§a en §fcopied_items.yml.");
+        // También agregar a rotated_items.yml si hay espacio
+        File rotatedFile = new File(plugin.getDataFolder(), "rotated_items.yml");
+        YamlConfiguration rotatedConfig = YamlConfiguration.loadConfiguration(rotatedFile);
+
+        for (int i = 1; i <= 3; i++) {
+            String slot = "rotated.item" + i;
+            if (!rotatedConfig.contains(slot + ".material")) {
+                rotatedConfig.set(slot + ".material", item.getType().name());
+                rotatedConfig.set(slot + ".amount", item.getAmount());
+                rotatedConfig.set(slot + ".price", price);
+                rotatedConfig.set(slot + ".name", meta != null && meta.hasDisplayName() ? meta.getDisplayName() : "Unnamed Item");
+                rotatedConfig.set(slot + ".lore", meta != null && meta.hasLore() ? meta.getLore() : Collections.singletonList(""));
+                if (meta != null && meta.hasCustomModelData()) {
+                    rotatedConfig.set(slot + ".customModelData", meta.getCustomModelData());
+                }
+                try {
+                    rotatedConfig.save(rotatedFile);
+                    player.sendMessage("§e✔ También agregado a §arotated_items.yml §fen §b" + slot);
+                } catch (IOException e) {
+                    player.sendMessage("§cError al guardar en rotated_items.yml.");
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+
         return true;
     }
 }
