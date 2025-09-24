@@ -27,18 +27,18 @@ public class CopyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("§cEste comando solo puede ser ejecutado por jugadores.");
+            sender.sendMessage("§cThis command can only be executed by players.");
             return true;
         }
 
         if (!command.getName().equalsIgnoreCase("jm") || args.length != 1 || !args[0].equalsIgnoreCase("copy")) {
-            player.sendMessage("§eUso correcto: §f/jm copy");
+            player.sendMessage("§e Correct usage: /jm copy");
             return true;
         }
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item == null || item.getType().isAir()) {
-            player.sendMessage("§cNo tienes ningún ítem en la mano.");
+            player.sendMessage("§cYou have no item in your hand.");
             return true;
         }
 
@@ -55,7 +55,7 @@ public class CopyCommand implements CommandExecutor {
 
         String id = "item" + System.currentTimeMillis();
         ItemSaver.saveItem(plugin.getDataFolder(), item, id, price);
-        player.sendMessage("§aItem copiado exitosamente como §e" + id + "§a en §fcopied_items.yml con precio §e$" + price);
+        player.sendMessage("§aItem successfully copied as §e" + id + "§a in copied_items.yml with price §e$" + price);
 
         // También agregar a rotated_items.yml si hay espacio
         File rotatedFile = new File(plugin.getDataFolder(), "rotated_items.yml");
@@ -74,9 +74,9 @@ public class CopyCommand implements CommandExecutor {
                 }
                 try {
                     rotatedConfig.save(rotatedFile);
-                    player.sendMessage("§e✔ También agregado a §arotated_items.yml §fen §b" + slot);
+                    player.sendMessage("§e✔ Also add to rotated_items.yml if there's space §fen §b" + slot);
                 } catch (IOException e) {
-                    player.sendMessage("§cError al guardar en rotated_items.yml.");
+                    player.sendMessage("§cError saving to rotated_items.yml.");
                     e.printStackTrace();
                 }
                 break;
